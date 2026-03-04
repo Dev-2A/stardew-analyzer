@@ -36,3 +36,7 @@ frontend/build/
 *.db
 *.sqlite
 uploads/
+
+# Test files
+backend/test_save.xml
+backend/test_parser.py
