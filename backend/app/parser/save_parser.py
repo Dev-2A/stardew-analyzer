@@ -148,6 +148,51 @@ class StardewSaveParser:
             "object_count": object_count,
         }
     
+    # ── 우정도 ──────────────────────────────────────────────
+    
+    def get_friendship(self) -> list[dict]:
+        """주민 우정도 목록 반환"""
+        from app.parser.villagers import ALL_VILLAGERS, get_max_hearts
+        
+        player = self.root.find("player")
+        if player is None:
+            return []
+        
+        friendship_data = player.find("friendshipData")
+        if friendship_data is None:
+            return []
+        
+        result = []
+        for item in friendship_data.findall("item"):
+            name_el = item.find("key/string")
+            if name_el is None:
+                continue
+            
+            name = name_el.text or ""
+            if name not in ALL_VILLAGERS:
+                continue
+            
+            friendship = item.find("value/Friendship")
+            if friendship is None:
+                continue
+            
+            points = self._get_int(friendship, "Points", 0)
+            status = self._get_text(friendship, "Status", "Friendly")
+            max_hearts = get_max_hearts(name, status)
+            hearts = min(points // 250, max_hearts)
+            
+            result.append({
+                "name": name,
+                "hearts": hearts,
+                "max_hearts": max_hearts,
+                "points": points,
+                "status": status,
+            })
+        
+        # 하트 수 내림차순 정렬
+        result.sort(key=lambda x: x["hearts"], reverse=True)
+        return result
+    
     # ── 전체 파싱 ───────────────────────────────────────────
     
     def parse_all(self) -> dict:
@@ -156,4 +201,5 @@ class StardewSaveParser:
             "basic_info": self.get_basic_info(),
             "skills": self.get_skills(),
             "farm_status": self.get_farm_status(),
+            "friendship": self.get_friendship(),
         }

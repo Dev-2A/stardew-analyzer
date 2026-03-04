@@ -29,7 +29,16 @@ class FarmStatus(BaseModel):
     object_count: int = 0
 
 
+class VillagerFriendship(BaseModel):
+    name: str
+    hearts: int = 0
+    max_hearts: int = 10
+    points: int = 0
+    status: str = "Friendly"
+
+
 class AnalysisResult(BaseModel):
     basic_info: BasicInfo = BasicInfo()
     skills: Skills = Skills()
-    farm_status = FarmStatus = FarmStatus()
+    farm_status: FarmStatus = FarmStatus()
+    friendship: list[VillagerFriendship] = []

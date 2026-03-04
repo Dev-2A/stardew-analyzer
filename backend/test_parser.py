@@ -23,6 +23,41 @@ if __name__ == "__main__":
       <int>100</int>
       <int>0</int>
     </experiencePoints>
+    <friendshipData>
+      <item>
+        <key><string>Abigail</string></key>
+        <value>
+          <Friendship>
+            <Points>1750</Points>
+            <GiftsThisWeek>0</GiftsThisWeek>
+            <GiftsToday>0</GiftsToday>
+            <Status>Friendly</Status>
+          </Friendship>
+        </value>
+      </item>
+      <item>
+        <key><string>Penny</string></key>
+        <value>
+          <Friendship>
+            <Points>2500</Points>
+            <GiftsThisWeek>1</GiftsThisWeek>
+            <GiftsToday>0</GiftsToday>
+            <Status>Dating</Status>
+          </Friendship>
+        </value>
+      </item>
+      <item>
+        <key><string>Robin</string></key>
+        <value>
+          <Friendship>
+            <Points>500</Points>
+            <GiftsThisWeek>0</GiftsThisWeek>
+            <GiftsToday>0</GiftsToday>
+            <Status>Friendly</Status>
+          </Friendship>
+        </value>
+      </item>
+    </friendshipData>
   </player>
   <whichFarm>0</whichFarm>
   <year>2</year>
