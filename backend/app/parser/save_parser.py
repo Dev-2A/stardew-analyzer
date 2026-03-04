@@ -193,6 +193,106 @@ class StardewSaveParser:
         result.sort(key=lambda x: x["hearts"], reverse=True)
         return result
     
+    # ── 퍼펙션 달성률 ────────────────────────────────────────
+    
+    def get_perfection(self) -> dict:
+        """퍼펙션 달성률 계산"""
+        player = self.root.find("player")
+        if player is None:
+            return {}
+        
+        items = []
+        
+        # 1. 스킬 레벨 합 (최대 50)
+        skills = self.get_skills()
+        skill_total = sum(skills.values())
+        skill_score = round((skill_total / 50) * 100)
+        items.append({
+            "key": "skills",
+            "label": "스킬 레벨",
+            "weight": 8,
+            "current": skill_total,
+            "required": 50,
+            "percent": min(skill_score, 100),
+            "done": skill_total >= 50,
+        })
+        
+        # 2. 주민 우정도 (결혼 가능 12명 최대 하트)
+        from app.parser.villagers import MARRIAGEABLE
+        friendship_list = self.get_friendship()
+        friendship_map = {f["name"]: f for f in friendship_list}
+        
+        max_heart_count = sum(
+            1 for name in MARRIAGEABLE
+            if friendship_map.get(name, {}).get("hearts", 0)
+            >= friendship_map.get(name, {}).get("max_hearts", 10)
+        )
+        friendship_score = round((max_heart_count / len(MARRIAGEABLE)) * 100)
+        items.append({
+            "key": "friendship",
+            "label": "주민 우정도",
+            "weight": 11,
+            "current": max_heart_count,
+            "required": len(MARRIAGEABLE),
+            "percent": friendship_score,
+            "done": max_heart_count >= len(MARRIAGEABLE),
+        })
+        
+        # 3. 별사탕 (stardropsObtained)
+        stardrop_el = player.find("stardropsObtained")
+        stardrop_count = 0
+        if stardrop_el is not None:
+            stardrop_count = len(list(stardrop_el))
+        stardrop_total = 7  # 게임 내 별사탕 총 7개
+        stardrop_score = round((stardrop_count / stardrop_total) * 100)
+        items.append({
+            "key": "stardrops",
+            "label": "별사탕",
+            "weight": 6,
+            "current": stardrop_count,
+            "required": stardrop_total,
+            "percent": min(stardrop_score, 100),
+            "done": stardrop_count >= stardrop_total,
+        })
+        
+        # 4. 황금 시계 (hasGoldenClock)
+        golden_clock = self._get_text(self.root, "hasGoldenClock", "false")
+        items.append({
+            "key": "golden_clock",
+            "label": "황금 시계",
+            "weight": 10,
+            "current": 1 if golden_clock == "true" else 0,
+            "required": 1,
+            "percent": 100 if golden_clock == "true" else 0,
+            "done": golden_clock == "true",
+        })
+        
+        # 5. 진저 아일랜드 호두 (goldenWalnuts)
+        walnut_el = self.root.find("goldenWalnuts")
+        walnut_count = int(walnut_el.text or "0") if walnut_el is not None else 0
+        walnut_total = 130
+        walnut_score = round((walnut_count / walnut_total) * 100)
+        items.append({
+            "key": "walnuts",
+            "label": "황금 호두",
+            "weight": 5,
+            "current": walnut_count,
+            "required": walnut_total,
+            "percent": min(walnut_score, 100),
+            "done": walnut_count >= walnut_total,
+        })
+        
+        # 전체 퍼펙션 점수 (가중 평균)
+        total_weight = sum(it["weight"] for it in items)
+        weighted_score = sum(
+            it["percent"] * it["weight"] for it in items
+        ) / total_weight if total_weight > 0 else 0
+        
+        return {
+            "total_percent": round(weighted_score, 1),
+            "items": items,
+        }
+    
     # ── 전체 파싱 ───────────────────────────────────────────
     
     def parse_all(self) -> dict:
@@ -202,4 +302,5 @@ class StardewSaveParser:
             "skills": self.get_skills(),
             "farm_status": self.get_farm_status(),
             "friendship": self.get_friendship(),
+            "perfection": self.get_perfection(),
         }

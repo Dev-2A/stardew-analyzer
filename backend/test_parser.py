@@ -58,6 +58,11 @@ if __name__ == "__main__":
         </value>
       </item>
     </friendshipData>
+    <stardropsObtained>
+      <string>CF_Fair</string>
+      <string>CF_Mines</string>
+      <string>CF_Spouse</string>
+    </stardropsObtained>
   </player>
   <whichFarm>0</whichFarm>
   <year>2</year>
@@ -86,6 +91,8 @@ if __name__ == "__main__":
       <objects />
     </GameLocation>
   </locations>
+  <hasGoldenClock>false</hasGoldenClock>
+  <goldenWalnuts>65</goldenWalnuts>
 </SaveGame>"""
 
     parser = StardewSaveParser(sample_xml)

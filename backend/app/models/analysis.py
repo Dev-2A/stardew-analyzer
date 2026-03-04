@@ -37,8 +37,24 @@ class VillagerFriendship(BaseModel):
     status: str = "Friendly"
 
 
+class PerfectionItem(BaseModel):
+    key: str
+    label: str
+    weight: int
+    current: int
+    required: int
+    percent: float
+    done: bool
+
+
+class Perfection(BaseModel):
+    total_percent: float = 0.0
+    items: list[PerfectionItem] = []
+
+
 class AnalysisResult(BaseModel):
     basic_info: BasicInfo = BasicInfo()
     skills: Skills = Skills()
     farm_status: FarmStatus = FarmStatus()
     friendship: list[VillagerFriendship] = []
+    perfection: Perfection = Perfection()
