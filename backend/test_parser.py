@@ -9,7 +9,7 @@ from app.parser.save_parser import StardewSaveParser
 if __name__ == "__main__":
     # 테스트용 최소 XML
     sample_xml = b"""<?xml version="1.0" encoding="utf-8"?>
-<SaveGame>
+<SaveGame xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
   <player>
     <name>Tangi</name>
     <farmName>Moonlit</farmName>
@@ -28,6 +28,29 @@ if __name__ == "__main__":
   <year>2</year>
   <currentSeason>summer</currentSeason>
   <dayOfMonth>15</dayOfMonth>
+  <locations>
+    <GameLocation xsi:type="Farm">
+      <buildings>
+        <Building><buildingType>Barn</buildingType></Building>
+        <Building><buildingType>Coop</buildingType></Building>
+      </buildings>
+      <animals>
+        <Animal><type>Cow</type></Animal>
+        <Animal><type>Chicken</type></Animal>
+        <Animal><type>Chicken</type></Animal>
+      </animals>
+      <terrainFeatures>
+        <item>
+          <value>
+            <TerrainFeature xsi:type="HoeDirt">
+              <crop><indexOfHarvest>24</indexOfHarvest></crop>
+            </TerrainFeature>
+          </value>
+        </item>
+      </terrainFeatures>
+      <objects />
+    </GameLocation>
+  </locations>
 </SaveGame>"""
 
     parser = StardewSaveParser(sample_xml)

@@ -86,6 +86,68 @@ class StardewSaveParser:
             for i, label in enumerate(skill_labels)
         }
     
+    # ── 농장 현황 ───────────────────────────────────────────
+    
+    def _get_farm_location(self):
+        """Farm 타입 GameLocation 노드 반환"""
+        locations = self.root.find("locations")
+        if locations is None:
+            return None
+        for loc in locations:
+            if loc.get("{http://www.w3.org/2001/XMLSchema-instance}type") == "Farm":
+                return loc
+        return None
+    
+    def get_farm_status(self) -> dict:
+        """농장 현황 반환"""
+        farm = self._get_farm_location()
+        if farm is None:
+            return {}
+        
+        # 건물 수
+        buildings = farm.find("buildings")
+        building_count = len(list(buildings)) if buildings is not None else 0
+        
+        # 건물 종류별 카운트
+        building_types: dict[str, int] = {}
+        if buildings is not None:
+            for b in buildings:
+                btype = self._get_text(b, "buildingType", "Unknown")
+                building_types[btype] = building_types.get(btype, 0) + 1
+        
+        # 동물 수
+        animals = farm.find("animals")
+        animal_count = 0
+        animal_types: dict[str, int] = {}
+        if animals is not None:
+            for animal in animals:
+                animal_count += 1
+                atype = self._get_text(animal, "type", "Unknown")
+                animal_types[atype] = animal_types.get(atype, 0) + 1
+        
+        # 작물 수 (terrainFeatures 내 HoeDirt -> crop 존재 여부)
+        terrain = farm.find("terrainFeatures")
+        crop_count = 0
+        if terrain is not None:
+            for item in terrain.iter("TerrainFeature"):
+                ftype = item.get("{http://www.w3.org/2001/XMLSchema-instance}type", "")
+                if ftype == "HoeDirt":
+                    if item.find("crop") is not None:
+                        crop_count += 1
+        
+        # 배치된 오브젝트 수
+        objects = farm.find("objects")
+        object_count = len(list(objects)) if objects is not None else 0
+        
+        return {
+            "building_count": building_count,
+            "building_types": building_types,
+            "animal_count": animal_count,
+            "animal_types": animal_types,
+            "crop_count": crop_count,
+            "object_count": object_count,
+        }
+    
     # ── 전체 파싱 ───────────────────────────────────────────
     
     def parse_all(self) -> dict:
@@ -93,4 +155,5 @@ class StardewSaveParser:
         return {
             "basic_info": self.get_basic_info(),
             "skills": self.get_skills(),
+            "farm_status": self.get_farm_status(),
         }
