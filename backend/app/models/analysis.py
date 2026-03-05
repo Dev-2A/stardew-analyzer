@@ -8,6 +8,7 @@ class BasicInfo(BaseModel):
     total_money_earned: int = 0
     year: int = 1
     season: str = ""
+    day: int = 1
     farm_type: str = ""
     hours_played: int = 0
 
