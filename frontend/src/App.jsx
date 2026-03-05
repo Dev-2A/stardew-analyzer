@@ -6,6 +6,7 @@ import Layout from "./components/Layout";
 import SkillsChart from "./components/SkillsChart";
 import UploadZone from "./components/UploadZone";
 import FriendshipRadar from "./components/FriendshipRadar";
+import PerfectionTracker from "./components/PerfectionTracker";
 
 export default function App() {
   const [result, setResult] = useState(null);
@@ -73,10 +74,8 @@ export default function App() {
           {/* 주민 우정도 */}
           <FriendshipRadar friendship={result.friendship} />
 
-          {/* 이후 단계에서 추가될 컴포넌트들 자리 */}
-          <div className="text-center text-gray-400 text-sm py-8">
-            퍼펙션 달성률 트래커는 다음 단계에서 추가됩니다 🌱
-          </div>
+          {/* 퍼펙션 달성률 */}
+          <PerfectionTracker perfection={result.perfection} />
         </div>
       )}
     </Layout>
