@@ -50,7 +50,7 @@ pip install -r requirements.txt
 uvicorn app.main:app --reload
 ```
 
-백엔드 서버: `http://localhost:8000`
+백엔드 서버: `http://localhost:8000`  
 API 문서 (Swagger UI): `http://localhost:8000/docs`
 
 ### 프론트엔드 실행
