@@ -1,7 +1,9 @@
 import { useState } from "react";
 import { analyzeFile } from "./api/client";
 import BasicInfoCard from "./components/BasicInfoCard";
+import FarmStatusCard from "./components/FarmStatusCard";
 import Layout from "./components/Layout";
+import SkillsChart from "./components/SkillsChart";
 import UploadZone from "./components/UploadZone";
 
 export default function App() {
@@ -61,9 +63,15 @@ export default function App() {
           {/* 기본 정보 카드 */}
           <BasicInfoCard data={result.basic_info} />
 
+          {/* 스킬 레벨 */}
+          <SkillsChart skills={result.skills} />
+
+          {/* 농장 현황 */}
+          <FarmStatusCard data={result.farm_status} />
+
           {/* 이후 단계에서 추가될 컴포넌트들 자리 */}
           <div className="text-center text-gray-400 text-sm py-8">
-            스킬·우정도·퍼펙션 시각화는 다음 단계에서 추가됩니다 🌱
+            우정도·퍼펙션 시각화는 다음 단계에서 추가됩니다 🌱
           </div>
         </div>
       )}
