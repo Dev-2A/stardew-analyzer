@@ -1,0 +1,22 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
+
+body {
+  background-color: #FDF6E3;
+  font-family: 'Segoe UI', sans-serif;
+}
+
+/* 픽셀 스타일 스크롤바 */
+::-webkit-scrollbar {
+  width: 8px;
+}
+::-webkit-scrollbar-track {
+  background: #FDF6E3;
+}
+::-webkit-scrollbar-thumb {
+  background: #8B6914;
+  border-radius: 4px;
+}
