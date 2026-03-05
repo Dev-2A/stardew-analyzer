@@ -5,6 +5,7 @@ import FarmStatusCard from "./components/FarmStatusCard";
 import Layout from "./components/Layout";
 import SkillsChart from "./components/SkillsChart";
 import UploadZone from "./components/UploadZone";
+import FriendshipRadar from "./components/FriendshipRadar";
 
 export default function App() {
   const [result, setResult] = useState(null);
@@ -69,9 +70,12 @@ export default function App() {
           {/* 농장 현황 */}
           <FarmStatusCard data={result.farm_status} />
 
+          {/* 주민 우정도 */}
+          <FriendshipRadar friendship={result.friendship} />
+
           {/* 이후 단계에서 추가될 컴포넌트들 자리 */}
           <div className="text-center text-gray-400 text-sm py-8">
-            우정도·퍼펙션 시각화는 다음 단계에서 추가됩니다 🌱
+            퍼펙션 달성률 트래커는 다음 단계에서 추가됩니다 🌱
           </div>
         </div>
       )}
